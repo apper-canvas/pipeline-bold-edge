@@ -74,11 +74,11 @@ let filtered = [...contacts]
       )
     }
 
-    if (activeFilters.tags && activeFilters.tags.length > 0) {
-      const tags_c = contact.tags_c?.split(',').map(t => t.trim()) || []
-      filtered = filtered.filter(contact =>
-        tags_c.some(tag => activeFilters.tags.includes(tag))
-      )
+if (activeFilters.tags && activeFilters.tags.length > 0) {
+      filtered = filtered.filter(contact => {
+        const tags_c = contact.tags_c?.split(',').map(t => t.trim()) || []
+        return tags_c.some(tag => activeFilters.tags.includes(tag))
+      })
     }
 
     setFilteredContacts(filtered)
