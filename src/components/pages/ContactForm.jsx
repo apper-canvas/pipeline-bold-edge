@@ -38,13 +38,22 @@ const ContactFormPage = () => {
     }
   }, [id, isEditing])
 
-  const handleSave = async (formData) => {
+const handleSave = async (formData) => {
     try {
+      const contactData = {
+        name_c: formData.name_c,
+        company_c: formData.company_c,
+        email_c: formData.email_c,
+        phone_c: formData.phone_c,
+        notes_c: formData.notes_c || "",
+        tags_c: Array.isArray(formData.tags_c) ? formData.tags_c.join(',') : formData.tags_c || ""
+      }
+      
       if (isEditing) {
-        await contactService.update(contact.Id, formData)
+        await contactService.update(contact.Id, contactData)
         toast.success("Contact updated successfully!")
       } else {
-        await contactService.create(formData)
+        await contactService.create(contactData)
         toast.success("Contact created successfully!")
       }
       navigate("/contacts")

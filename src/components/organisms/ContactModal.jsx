@@ -30,8 +30,14 @@ const ContactModal = ({
 
   if (!contact) return null
 
-  const contactDeals = deals.filter(deal => deal.contactId === contact.Id)
-  const contactActivities = activities.filter(activity => activity.contactId === contact.Id)
+const contactDeals = deals.filter(deal => {
+    const dealContactId = deal.contact_id_c?.Id || deal.contact_id_c
+    return dealContactId === contact.Id
+  })
+  const contactActivities = activities.filter(activity => {
+    const activityContactId = activity.contact_id_c?.Id || activity.contact_id_c
+    return activityContactId === contact.Id
+  })
 
   const tabs = [
     { id: "info", label: "Info", icon: "User" },
@@ -74,9 +80,9 @@ const ContactModal = ({
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
                     <Avatar name={contact.name} size="lg" />
-                    <div>
-                      <h2 className="text-xl font-semibold">{contact.name}</h2>
-                      <p className="text-primary-100">{contact.company}</p>
+<div>
+                      <h2 className="text-xl font-semibold">{contact.name_c || contact.Name}</h2>
+                      <p className="text-primary-100">{contact.company_c}</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -141,25 +147,25 @@ const ContactModal = ({
                               <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Name
                               </label>
-                              <p className="text-gray-900">{contact.name}</p>
+<p className="text-gray-900">{contact.name_c || contact.Name}</p>
                             </div>
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Company
                               </label>
-                              <p className="text-gray-900">{contact.company}</p>
+                              <p className="text-gray-900">{contact.company_c}</p>
                             </div>
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Email
                               </label>
-                              <p className="text-gray-900">{contact.email}</p>
+                              <p className="text-gray-900">{contact.email_c}</p>
                             </div>
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Phone
                               </label>
-                              <p className="text-gray-900">{formatPhone(contact.phone)}</p>
+                              <p className="text-gray-900">{formatPhone(contact.phone_c)}</p>
                             </div>
                           </div>
                           <div className="space-y-4">
@@ -168,9 +174,9 @@ const ContactModal = ({
                                 Tags
                               </label>
                               <div className="flex flex-wrap gap-2">
-                                {contact.tags?.map((tag, index) => (
+{contact.tags_c?.split(',').map((tag, index) => (
                                   <Badge key={index} variant="default">
-                                    {tag}
+                                    {tag.trim()}
                                   </Badge>
                                 ))}
                               </div>
@@ -179,23 +185,23 @@ const ContactModal = ({
                               <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Created
                               </label>
-                              <p className="text-gray-900">{formatDate(contact.createdAt)}</p>
+<p className="text-gray-900">{formatDate(contact.created_at_c)}</p>
                             </div>
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Last Updated
                               </label>
-                              <p className="text-gray-900">{formatDate(contact.updatedAt)}</p>
+                              <p className="text-gray-900">{formatDate(contact.updated_at_c)}</p>
                             </div>
                           </div>
                         </div>
                         {contact.notes && (
-                          <div>
+<div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                               Notes
                             </label>
                             <div className="bg-gray-50 rounded-lg p-4">
-                              <p className="text-gray-900 whitespace-pre-wrap">{contact.notes}</p>
+                              <p className="text-gray-900 whitespace-pre-wrap">{contact.notes_c}</p>
                             </div>
                           </div>
                         )}
@@ -211,17 +217,17 @@ const ContactModal = ({
                         <div key={deal.Id} className="card p-4 cursor-pointer hover:shadow-md">
                           <div className="flex items-center justify-between">
                             <div>
-                              <h4 className="font-semibold text-gray-900">{deal.title}</h4>
+<h4 className="font-semibold text-gray-900">{deal.title_c}</h4>
                               <p className="text-sm text-gray-600">
-                                {formatDate(deal.closeDate)} • {deal.probability}% probability
+                                {formatDate(deal.close_date_c)} • {deal.probability_c}% probability
                               </p>
                             </div>
                             <div className="text-right">
                               <p className="font-bold text-gray-900">
-                                {formatCurrency(deal.value)}
+                                {formatCurrency(deal.value_c)}
                               </p>
-                              <Badge variant={deal.stage.toLowerCase()}>
-                                {deal.stage}
+                              <Badge variant={deal.stage_c?.toLowerCase()}>
+                                {deal.stage_c}
                               </Badge>
                             </div>
                           </div>

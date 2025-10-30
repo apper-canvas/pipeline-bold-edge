@@ -72,20 +72,22 @@ const Dashboard = () => {
   }
 
   // Calculate metrics
-  const totalPipelineValue = deals
-    .filter(deal => !["won", "lost"].includes(deal.stage))
-    .reduce((sum, deal) => sum + deal.value, 0)
+const totalPipelineValue = deals
+    .filter(deal => !["won", "lost"].includes(deal.stage_c?.toLowerCase()))
+    .reduce((sum, deal) => sum + (deal.value_c || 0), 0)
 
-  const wonDeals = deals.filter(deal => deal.stage === "won")
-  const wonValue = wonDeals.reduce((sum, deal) => sum + deal.value, 0)
+const wonDeals = deals.filter(deal => deal.stage_c?.toLowerCase() === "won")
+const wonValue = wonDeals.reduce((sum, deal) => sum + (deal.value_c || 0), 0)
 
-  const activeDeals = deals.filter(deal => !["won", "lost"].includes(deal.stage))
+const activeDeals = deals.filter(deal => !["won", "lost"].includes(deal.stage_c?.toLowerCase()))
 
   const stageDistribution = stages.map(stage => {
-    const stageDeals = deals.filter(deal => deal.stage === stage.Id)
-    const stageValue = stageDeals.reduce((sum, deal) => sum + deal.value, 0)
+const stageDeals = deals.filter(deal => deal.stage_c === stage.Id)
+    const stageValue = stageDeals.reduce((sum, deal) => sum + (deal.value_c || 0), 0)
     return {
       ...stage,
+      name: stage.name_c || stage.Name,
+      color: stage.color_c,
       count: stageDeals.length,
       value: stageValue
     }
@@ -170,15 +172,15 @@ const Dashboard = () => {
         
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {stageDistribution.map(stage => (
-            <div key={stage.Id} className="text-center">
+<div key={stage.Id} className="text-center">
               <div 
                 className="w-full h-2 rounded-full mb-3"
-                style={{ backgroundColor: stage.color + "20" }}
+                style={{ backgroundColor: (stage.color || '#gray') + "20" }}
               >
                 <div 
                   className="h-full rounded-full transition-all duration-500"
                   style={{ 
-                    backgroundColor: stage.color,
+                    backgroundColor: stage.color || '#gray',
                     width: `${Math.max((stage.count / Math.max(...stageDistribution.map(s => s.count))) * 100, 10)}%`
                   }}
                 />

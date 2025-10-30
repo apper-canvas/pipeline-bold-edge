@@ -42,11 +42,11 @@ const ActivityItem = ({
           <ApperIcon name={getActivityIcon(activity.type)} size={14} />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm text-gray-900 truncate">{activity.description}</p>
-          <p className="text-xs text-gray-500">{formatRelativeTime(activity.timestamp)}</p>
+<p className="text-sm text-gray-900 truncate">{activity.description_c}</p>
+<p className="text-xs text-gray-500">{formatRelativeTime(activity.timestamp_c)}</p>
         </div>
         {showContact && contact && (
-          <Avatar name={contact.name} size="sm" />
+<Avatar name={contact?.name_c || contact?.Name} size="sm" />
         )}
       </div>
     )
@@ -55,11 +55,11 @@ const ActivityItem = ({
   return (
     <div className={cn("flex space-x-4 py-4", className)}>
       <div className="flex flex-col items-center">
-        <div className={cn("p-2 rounded-full bg-white shadow-sm border-2", getActivityColor(activity.type).replace('text-', 'border-'))}>
+<div className={cn("p-2 rounded-full bg-white shadow-sm border-2", getActivityColor(activity.type_c).replace('text-', 'border-'))}>
           <ApperIcon 
-            name={getActivityIcon(activity.type)} 
+            name={getActivityIcon(activity.type_c)} 
             size={16} 
-            className={getActivityColor(activity.type)}
+            className={getActivityColor(activity.type_c)}
           />
         </div>
         <div className="w-0.5 bg-gray-200 flex-1 mt-2"></div>
@@ -68,25 +68,25 @@ const ActivityItem = ({
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
-            <Badge variant={activity.type.toLowerCase()} className="text-xs">
-              {activity.type}
+<Badge variant={activity.type_c?.toLowerCase()} className="text-xs">
+              {activity.type_c}
             </Badge>
             <span className="text-sm text-gray-500">
               {formatRelativeTime(activity.timestamp)}
             </span>
           </div>
-          {showContact && contact && (
+{showContact && contact && (
             <div className="flex items-center space-x-2">
-              <Avatar name={contact.name} size="sm" />
-              <span className="text-sm font-medium text-gray-700">{contact.name}</span>
+              <Avatar name={contact.name_c || contact.Name} size="sm" />
+              <span className="text-sm font-medium text-gray-700">{contact.name_c || contact.Name}</span>
             </div>
           )}
         </div>
         
-        <p className="text-gray-900 mb-2">{activity.description}</p>
+<p className="text-gray-900 mb-2">{activity.description_c}</p>
         
         <div className="text-xs text-gray-500">
-          {formatDateTime(activity.timestamp)}
+{formatDateTime(activity.timestamp_c)}
         </div>
       </div>
     </div>

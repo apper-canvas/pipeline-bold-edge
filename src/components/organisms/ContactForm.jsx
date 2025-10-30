@@ -12,13 +12,13 @@ const ContactForm = ({
   onCancel,
   className 
 }) => {
-  const [formData, setFormData] = useState({
-    name: contact?.name || "",
-    company: contact?.company || "",
-    email: contact?.email || "",
-    phone: contact?.phone || "",
-    notes: contact?.notes || "",
-    tags: contact?.tags?.join(", ") || ""
+const [formData, setFormData] = useState({
+    name_c: contact?.name_c || "",
+    company_c: contact?.company_c || "",
+    email_c: contact?.email_c || "",
+    phone_c: contact?.phone_c || "",
+    notes_c: contact?.notes_c || "",
+    tags_c: contact?.tags_c || ""
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState({})
@@ -67,11 +67,8 @@ const ContactForm = ({
     
     try {
       const submitData = {
-        ...formData,
-        tags: formData.tags
-          .split(",")
-          .map(tag => tag.trim())
-          .filter(tag => tag.length > 0)
+...formData,
+        tags_c: formData.tags_c
       }
       
       await onSave?.(submitData)
@@ -87,58 +84,58 @@ const ContactForm = ({
     <form onSubmit={handleSubmit} className={cn("space-y-6", className)}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Input
-          name="name"
+name="name_c"
           label="Full Name"
-          value={formData.name}
+          value={formData.name_c}
           onChange={handleChange}
-          error={errors.name}
+          error={errors.name_c}
           placeholder="Enter full name"
           required
         />
         
         <Input
-          name="company"
+          name="company_c"
           label="Company"
-          value={formData.company}
+          value={formData.company_c}
           onChange={handleChange}
-          error={errors.company}
+          error={errors.company_c}
           placeholder="Enter company name"
           required
         />
         
         <Input
-          name="email"
+          name="email_c"
           type="email"
           label="Email Address"
-          value={formData.email}
+          value={formData.email_c}
           onChange={handleChange}
-          error={errors.email}
+          error={errors.email_c}
           placeholder="Enter email address"
           required
         />
         
         <Input
-          name="phone"
+          name="phone_c"
           label="Phone Number"
-          value={formData.phone}
+          value={formData.phone_c}
           onChange={handleChange}
-          error={errors.phone}
+          error={errors.phone_c}
           placeholder="Enter phone number"
         />
       </div>
 
-      <Input
-        name="tags"
+<Input
+        name="tags_c"
         label="Tags"
-        value={formData.tags}
+        value={formData.tags_c}
         onChange={handleChange}
         placeholder="Enter tags separated by commas (e.g., VIP, Prospect, Enterprise)"
       />
 
-      <Textarea
-        name="notes"
+<Textarea
+        name="notes_c"
         label="Notes"
-        value={formData.notes}
+        value={formData.notes_c}
         onChange={handleChange}
         placeholder="Add any additional notes about this contact..."
         rows={4}

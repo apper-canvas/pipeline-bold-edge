@@ -3,11 +3,12 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import { cn } from "@/utils/cn"
 import ApperIcon from "@/components/ApperIcon"
 import Button from "@/components/atoms/Button"
-
+import { useAuth } from "@/layouts/Root"
 const Header = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { logout } = useAuth()
 
   const navigation = [
     { name: "Dashboard", href: "/", icon: "LayoutDashboard" },
@@ -61,7 +62,7 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* Actions */}
+{/* Actions */}
           <div className="hidden md:flex items-center space-x-4">
             <Button
               variant="primary"
@@ -71,6 +72,15 @@ const Header = () => {
             >
               <ApperIcon name="Plus" size={16} />
               <span>Add Contact</span>
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={logout}
+              className="flex items-center space-x-2"
+            >
+              <ApperIcon name="LogOut" size={16} />
+              <span>Logout</span>
             </Button>
           </div>
 
@@ -105,7 +115,7 @@ const Header = () => {
                   <span>{item.name}</span>
                 </Link>
               ))}
-              <div className="pt-4 mt-4 border-t border-gray-200">
+<div className="pt-4 mt-4 border-t border-gray-200 space-y-2">
                 <Button
                   variant="primary"
                   size="sm"
@@ -117,6 +127,18 @@ const Header = () => {
                 >
                   <ApperIcon name="Plus" size={16} />
                   <span>Add Contact</span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setMobileMenuOpen(false)
+                    logout()
+                  }}
+                  className="w-full flex items-center justify-center space-x-2"
+                >
+                  <ApperIcon name="LogOut" size={16} />
+                  <span>Logout</span>
                 </Button>
               </div>
             </nav>

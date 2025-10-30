@@ -55,28 +55,29 @@ const Contacts = () => {
 
   // Filter contacts based on search and filters
   useEffect(() => {
-    let filtered = [...contacts]
+let filtered = [...contacts]
 
     // Search filter
     if (searchTerm) {
       filtered = filtered.filter(contact =>
-        contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        contact.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        contact.tags?.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+        contact.name_c?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        contact.company_c?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        contact.email_c?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        contact.tags_c?.toLowerCase().includes(searchTerm.toLowerCase())
       )
     }
 
     // Additional filters
     if (activeFilters.company) {
       filtered = filtered.filter(contact =>
-        contact.company.toLowerCase().includes(activeFilters.company.toLowerCase())
+        contact.company_c?.toLowerCase().includes(activeFilters.company.toLowerCase())
       )
     }
 
     if (activeFilters.tags && activeFilters.tags.length > 0) {
+      const tags_c = contact.tags_c?.split(',').map(t => t.trim()) || []
       filtered = filtered.filter(contact =>
-        contact.tags?.some(tag => activeFilters.tags.includes(tag))
+        tags_c.some(tag => activeFilters.tags.includes(tag))
       )
     }
 

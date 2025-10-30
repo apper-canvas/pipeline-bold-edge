@@ -1,58 +1,175 @@
-import mockActivities from "@/services/mockData/activities.json"
-
-let activities = [...mockActivities]
-
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+import { getApperClient } from "@/services/apperClient"
+import { toast } from "react-toastify"
 
 export const activityService = {
   async getAll() {
-    await delay(300)
-    return [...activities].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+    try {
+      const apperClient = getApperClient()
+      
+      const response = await apperClient.fetchRecords('activity_c', {
+        fields: [
+          {"field": {"Name": "Name"}},
+          {"field": {"Name": "type_c"}},
+          {"field": {"Name": "description_c"}},
+          {"field": {"Name": "timestamp_c"}},
+          {"field": {"Name": "contact_id_c"}, "referenceField": {"field": {"Name": "Name"}}}
+        ],
+        orderBy: [{"fieldName": "timestamp_c", "sorttype": "DESC"}]
+      })
+      
+      if (!response.success) {
+        console.error(response.message)
+        toast.error(response.message)
+        return []
+      }
+      
+      return response.data || []
+    } catch (error) {
+      console.error("Error fetching activities:", error?.message || error)
+      toast.error("Failed to load activities")
+      return []
+    }
   },
 
   async getById(id) {
-    await delay(200)
-    const activity = activities.find(a => a.Id === parseInt(id))
-    if (!activity) {
-      throw new Error("Activity not found")
+    try {
+      const apperClient = getApperClient()
+      
+      const response = await apperClient.getRecordById('activity_c', parseInt(id), {
+        fields: [
+          {"field": {"Name": "Name"}},
+          {"field": {"Name": "type_c"}},
+          {"field": {"Name": "description_c"}},
+          {"field": {"Name": "timestamp_c"}},
+          {"field": {"Name": "contact_id_c"}, "referenceField": {"field": {"Name": "Name"}}}
+        ]
+      })
+      
+      if (!response.success) {
+        console.error(response.message)
+        toast.error(response.message)
+        return null
+      }
+      
+      return response.data
+    } catch (error) {
+      console.error(`Error fetching activity ${id}:`, error?.message || error)
+      toast.error("Failed to load activity")
+      return null
     }
-    return { ...activity }
   },
 
   async create(activityData) {
-    await delay(400)
-    const newActivity = {
-      ...activityData,
-      Id: Math.max(...activities.map(a => a.Id), 0) + 1,
-      timestamp: new Date().toISOString()
+    try {
+      const apperClient = getApperClient()
+      
+      const response = await apperClient.createRecord('activity_c', {
+        records: [{
+          Name: activityData.Name || activityData.type_c,
+          type_c: activityData.type_c,
+          description_c: activityData.description_c,
+          timestamp_c: activityData.timestamp_c || new Date().toISOString(),
+          contact_id_c: activityData.contact_id_c ? parseInt(activityData.contact_id_c) : null
+        }]
+      })
+      
+      if (!response.success) {
+        console.error(response.message)
+        toast.error(response.message)
+        return null
+      }
+      
+      if (response.results) {
+        const failed = response.results.filter(r => !r.success)
+        if (failed.length > 0) {
+          console.error(`Failed to create activity:`, failed)
+          failed.forEach(record => {
+            if (record.message) toast.error(record.message)
+          })
+          return null
+        }
+        return response.results[0].data
+      }
+      
+      return response.data
+    } catch (error) {
+      console.error("Error creating activity:", error?.message || error)
+      toast.error("Failed to create activity")
+      return null
     }
-    activities.push(newActivity)
-    return { ...newActivity }
   },
 
   async update(id, activityData) {
-    await delay(350)
-    const index = activities.findIndex(a => a.Id === parseInt(id))
-    if (index === -1) {
-      throw new Error("Activity not found")
+    try {
+      const apperClient = getApperClient()
+      
+      const response = await apperClient.updateRecord('activity_c', {
+        records: [{
+          Id: parseInt(id),
+          Name: activityData.Name || activityData.type_c,
+          type_c: activityData.type_c,
+          description_c: activityData.description_c,
+          timestamp_c: activityData.timestamp_c,
+          contact_id_c: activityData.contact_id_c ? parseInt(activityData.contact_id_c) : null
+        }]
+      })
+      
+      if (!response.success) {
+        console.error(response.message)
+        toast.error(response.message)
+        return null
+      }
+      
+      if (response.results) {
+        const failed = response.results.filter(r => !r.success)
+        if (failed.length > 0) {
+          console.error(`Failed to update activity:`, failed)
+          failed.forEach(record => {
+            if (record.message) toast.error(record.message)
+          })
+          return null
+        }
+        return response.results[0].data
+      }
+      
+      return response.data
+    } catch (error) {
+      console.error("Error updating activity:", error?.message || error)
+      toast.error("Failed to update activity")
+      return null
     }
-    
-    const updatedActivity = {
-      ...activities[index],
-      ...activityData,
-      Id: parseInt(id)
-    }
-    activities[index] = updatedActivity
-    return { ...updatedActivity }
   },
 
   async delete(id) {
-    await delay(250)
-    const index = activities.findIndex(a => a.Id === parseInt(id))
-    if (index === -1) {
-      throw new Error("Activity not found")
+    try {
+      const apperClient = getApperClient()
+      
+      const response = await apperClient.deleteRecord('activity_c', {
+        RecordIds: [parseInt(id)]
+      })
+      
+      if (!response.success) {
+        console.error(response.message)
+        toast.error(response.message)
+        return false
+      }
+      
+      if (response.results) {
+        const failed = response.results.filter(r => !r.success)
+        if (failed.length > 0) {
+          console.error(`Failed to delete activity:`, failed)
+          failed.forEach(record => {
+            if (record.message) toast.error(record.message)
+          })
+          return false
+        }
+      }
+      
+      return true
+    } catch (error) {
+      console.error("Error deleting activity:", error?.message || error)
+      toast.error("Failed to delete activity")
+      return false
     }
-    activities.splice(index, 1)
-    return true
   }
 }

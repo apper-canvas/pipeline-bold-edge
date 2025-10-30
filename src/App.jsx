@@ -1,9 +1,9 @@
 import { RouterProvider } from "react-router-dom"
 import { ToastContainer } from "react-toastify"
-import { router } from "@/router/index.jsx"
+import { router } from "@/router"
 
 function App() {
-  return (
+return (
     <>
       <RouterProvider router={router} />
       <ToastContainer
@@ -19,7 +19,7 @@ function App() {
         theme="light"
         style={{ zIndex: 9999 }}
       />
-    </>
+</>
   )
 }
 

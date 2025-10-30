@@ -21,11 +21,11 @@ const ActivityFormPage = () => {
   const [loading, setLoading] = useState(isEditing)
   const [contactsLoading, setContactsLoading] = useState(true)
   const [error, setError] = useState("")
-  const [formData, setFormData] = useState({
-    contactId: "",
-    type: "call",
-    subject: "",
-    notes: "",
+const [formData, setFormData] = useState({
+    contact_id_c: "",
+    type_c: "call",
+    Name: "",
+    description_c: "",
     date: new Date().toISOString().split('T')[0],
     time: new Date().toTimeString().slice(0, 5)
   })
@@ -40,7 +40,7 @@ const ActivityFormPage = () => {
   ]
 
   const loadActivity = async () => {
-    if (!id) return
+if (!id) return
     
     try {
       setLoading(true)
@@ -49,12 +49,12 @@ const ActivityFormPage = () => {
       setActivity(activityData)
       
       // Parse the activity data for the form
-      const activityDate = new Date(activityData.date)
+      const activityDate = new Date(activityData.timestamp_c)
       setFormData({
-        contactId: activityData.contactId,
-        type: activityData.type,
-        subject: activityData.subject,
-        notes: activityData.notes || "",
+        contact_id_c: activityData.contact_id_c?.Id || activityData.contact_id_c,
+        type_c: activityData.type_c,
+        Name: activityData.Name,
+        description_c: activityData.description_c || "",
         date: activityDate.toISOString().split('T')[0],
         time: activityDate.toTimeString().slice(0, 5)
       })
@@ -118,14 +118,14 @@ const ActivityFormPage = () => {
       setSaving(true)
       
       // Combine date and time
-      const activityDateTime = new Date(`${formData.date}T${formData.time}`)
+const activityDateTime = new Date(`${formData.date}T${formData.time}`)
       
       const activityData = {
-        contactId: formData.contactId,
-        type: formData.type,
-        subject: formData.subject.trim(),
-        notes: formData.notes?.trim() || "",
-        date: activityDateTime.toISOString()
+        contact_id_c: formData.contact_id_c,
+        type_c: formData.type_c,
+        Name: formData.Name.trim(),
+        description_c: formData.description_c?.trim() || "",
+        timestamp_c: activityDateTime.toISOString()
       }
 
       if (isEditing) {
@@ -179,7 +179,7 @@ const ActivityFormPage = () => {
     )
   }
 
-  const selectedContact = contacts.find(c => c.id === formData.contactId)
+const selectedContact = contacts.find(c => c.Id === parseInt(formData.contact_id_c))
 
   return (
     <div className="space-y-6">
@@ -207,13 +207,13 @@ const ActivityFormPage = () => {
       <div className="card p-8">
         <div className="space-y-6">
           {/* Contact Selection */}
-          <div className="space-y-2">
+<div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
               Contact *
             </label>
             <Select
-              value={formData.contactId}
-              onChange={(value) => handleInputChange("contactId", value)}
+              value={formData.contact_id_c}
+              onChange={(value) => handleInputChange("contact_id_c", value)}
               placeholder="Select a contact"
               disabled={contactsLoading}
             >
@@ -231,12 +231,12 @@ const ActivityFormPage = () => {
               )}
             </Select>
             {selectedContact && (
-              <div className="text-sm text-gray-500 mt-1">
-                {selectedContact.email && (
-                  <span className="mr-4">{selectedContact.email}</span>
+<div className="text-sm text-gray-500 mt-1">
+                {selectedContact.email_c && (
+                  <span className="mr-4">{selectedContact.email_c}</span>
                 )}
-                {selectedContact.phone && (
-                  <span>{selectedContact.phone}</span>
+                {selectedContact.phone_c && (
+                  <span>{selectedContact.phone_c}</span>
                 )}
               </div>
             )}

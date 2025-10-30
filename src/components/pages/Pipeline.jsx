@@ -85,12 +85,12 @@ const Pipeline = () => {
   }
 
   // Calculate pipeline metrics
-  const totalPipelineValue = deals
-    .filter(deal => !["won", "lost"].includes(deal.stage))
-    .reduce((sum, deal) => sum + deal.value, 0)
+const totalPipelineValue = deals
+    .filter(deal => !["won", "lost"].includes(deal.stage_c?.toLowerCase()))
+    .reduce((sum, deal) => sum + (deal.value_c || 0), 0)
 
-  const activeDeals = deals.filter(deal => !["won", "lost"].includes(deal.stage))
-  const wonDeals = deals.filter(deal => deal.stage === "won")
+  const activeDeals = deals.filter(deal => !["won", "lost"].includes(deal.stage_c?.toLowerCase()))
+  const wonDeals = deals.filter(deal => deal.stage_c?.toLowerCase() === "won")
   const avgDealSize = activeDeals.length > 0 ? totalPipelineValue / activeDeals.length : 0
 
   if (deals.length === 0) {

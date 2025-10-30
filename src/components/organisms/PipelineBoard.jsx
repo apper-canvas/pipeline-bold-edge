@@ -18,17 +18,18 @@ const PipelineBoard = ({
   const [draggedDeal, setDraggedDeal] = useState(null)
   const [dragOverStage, setDragOverStage] = useState(null)
 
-  const getDealsByStage = (stageId) => {
-    return deals.filter(deal => deal.stage === stageId)
+const getDealsByStage = (stageId) => {
+    return deals.filter(deal => deal.stage_c === stageId)
   }
 
-  const getStageValue = (stageId) => {
-    return getDealsByStage(stageId).reduce((sum, deal) => sum + (deal.value || 0), 0)
+const getStageValue = (stageId) => {
+    return getDealsByStage(stageId).reduce((sum, deal) => sum + (deal.value_c || 0), 0)
   }
 
-  const getContactForDeal = (dealId) => {
+const getContactForDeal = (dealId) => {
     const deal = deals.find(d => d.Id === dealId)
-    return contacts.find(c => c.Id === deal?.contactId)
+    const contactId = deal?.contact_id_c?.Id || deal?.contact_id_c
+    return contacts.find(c => c.Id === contactId)
   }
 
   const handleDragStart = (e, deal) => {
@@ -54,7 +55,7 @@ const PipelineBoard = ({
     e.preventDefault()
     setDragOverStage(null)
     
-    if (!draggedDeal || draggedDeal.stage === stageId) {
+if (!draggedDeal || draggedDeal.stage_c === stageId) {
       return
     }
 
@@ -97,9 +98,9 @@ const PipelineBoard = ({
                 <div className="flex items-center space-x-2">
                   <div 
                     className="w-3 h-3 rounded-full"
-                    style={{ backgroundColor: stage.color }}
+style={{ backgroundColor: stage.color_c }}
                   ></div>
-                  <h3 className="font-semibold text-gray-900">{stage.name}</h3>
+<h3 className="font-semibold text-gray-900">{stage.name_c || stage.Name}</h3>
                   <Badge variant="default" className="text-xs">
                     {stageDeals.length}
                   </Badge>

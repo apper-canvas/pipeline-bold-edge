@@ -27,11 +27,11 @@ const ContactTable = ({
     }
   }
 
-  const sortedContacts = [...contacts].sort((a, b) => {
+const sortedContacts = [...contacts].sort((a, b) => {
     let aValue = a[sortField] || ""
     let bValue = b[sortField] || ""
 
-    if (sortField === "updatedAt") {
+    if (sortField === "updated_at_c") {
       aValue = new Date(aValue)
       bValue = new Date(bValue)
     }
@@ -108,49 +108,49 @@ const ContactTable = ({
               >
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
-                    <Avatar name={contact.name} size="default" />
+<Avatar name={contact.name_c || contact.Name} size="default" />
                     <div className="ml-4">
                       <div className="text-sm font-medium text-gray-900">
-                        {contact.name}
+{contact.name_c || contact.Name}
                       </div>
                     </div>
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{contact.company}</div>
+<div className="text-sm text-gray-900">{contact.company_c}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="space-y-1">
-                    {contact.email && (
+{contact.email_c && (
                       <div className="flex items-center text-sm text-gray-600">
                         <ApperIcon name="Mail" size={14} className="mr-2" />
-                        <span className="truncate max-w-[200px]">{contact.email}</span>
+                        <span className="truncate max-w-[200px]">{contact.email_c}</span>
                       </div>
                     )}
-                    {contact.phone && (
+                    {contact.phone_c && (
                       <div className="flex items-center text-sm text-gray-600">
                         <ApperIcon name="Phone" size={14} className="mr-2" />
-                        <span>{formatPhone(contact.phone)}</span>
+                        <span>{formatPhone(contact.phone_c)}</span>
                       </div>
                     )}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex flex-wrap gap-1">
-                    {contact.tags?.slice(0, 2).map((tag, index) => (
+{contact.tags_c?.split(',').slice(0, 2).map((tag, index) => (
                       <Badge key={index} variant="default" className="text-xs">
-                        {tag}
+                        {tag.trim()}
                       </Badge>
                     ))}
-                    {contact.tags?.length > 2 && (
+                    {contact.tags_c?.split(',').length > 2 && (
                       <Badge variant="default" className="text-xs">
-                        +{contact.tags.length - 2}
+                        +{contact.tags_c.split(',').length - 2}
                       </Badge>
                     )}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {formatRelativeTime(contact.updatedAt)}
+{formatRelativeTime(contact.updated_at_c)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <div 
